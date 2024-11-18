@@ -24,5 +24,7 @@
     "eslint-plugin-react-refresh": "^0.4.14",
     "globals": "^15.12.0",
     "vite": "^5.4.10"
-  }
+  },
+  "homepage": "https://kisernl.github.io/donut-dozenzies/"
+
 }
