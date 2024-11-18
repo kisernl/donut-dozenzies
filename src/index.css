@@ -4,7 +4,7 @@
 
 body {
   font-family: 'Atma', system-ui;
-  background-image: url('../ManyDonuts.svg');
+  background-image: url('./ManyDonuts.svg');
   /* background-repeat: no-repeat; */
   background-position: center;
   background-size: cover;
