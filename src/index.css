@@ -1,0 +1,101 @@
+* {
+  margin: 0;
+}
+
+body {
+  font-family: 'Atma', system-ui;
+  background-image: url('../ManyDonuts.svg');
+  /* background-repeat: no-repeat; */
+  background-position: center;
+  background-size: cover;
+  max-width: 1080px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  place-items: center;
+}
+
+main {
+  display: flex;
+  height: 100vh;
+  place-items: center;
+}
+
+.game--container {
+  background-color: rgba(43, 193, 243, 0.75);
+  border-radius: 10px;
+  height: 100%;
+  max-height: 500px;
+  padding: 3rem;
+  display: flex;
+  place-items: center;
+}
+
+.game--inner-container {
+  background-color: rgba(255, 255, 255, 1);
+  border-radius: 10px;
+  height: 100%;
+  max-height: 450px;
+  margin: 2rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.game--title {
+  height: 100%;
+}
+
+h1 {
+  font-family: 'Galindo', serif;
+}
+
+.box--container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  padding: 1rem;
+}
+
+.donut--container {
+  display: grid;
+  height: 100%;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px; /* Optional: adds spacing between grid items */
+  width: 100%; /* Optional: makes the grid take the full width of the container */
+  max-width: 500px; /* Optional: limits grid size */
+}
+
+.donut--box {
+  height: 100px;
+  background-color: rgb(233, 247, 159);
+  padding: 0.25rem;
+  border-radius: 10px;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.donut--img {
+  height: 100%;
+}
+
+button {
+  font-family: 'Atma', system-ui;
+  font-weight: 700;
+  font-size: x-large;
+  padding: 0.5rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+  border: none;
+  border-radius: 1rem;
+  background-color: rgb(243, 97, 236);
+  color: white;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
