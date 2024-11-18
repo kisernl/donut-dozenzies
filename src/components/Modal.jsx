@@ -2,7 +2,7 @@ import React from 'react';
 import './modal.css'; // Optional: Add CSS for styling
 
 export default function Modal({ isOpen, onClose, children }) {
-  if (!isOpen) return null; // Render nothing if the modal is not open
+  // if (!isOpen) return null;
 
   return (
     <div className="modal-overlay" onClick={onClose}>

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Box from './components/Box.jsx';
 import { nanoid } from 'nanoid';
 import donutData from './assets/donutData.js';
@@ -14,9 +14,11 @@ import Modal from './components/Modal';
 // ** ✅ create conditional box coloring depending on isHeld
 // ** ✅ make isHeld boxes remain when other boxes swap
 // create win game feature
-// ** track when all boxes are held & all dinut images are the same
+// ** ✅ create state for tracking win conditions
+// ** ✅ create useEffect to update and watch win state
+// ** ✅ track when all boxes are held & all donut images are the same
 // ** change button copy from "swap" to "new game"
-// ** create modal pop up with message when player wins (clicks last matching donut)
+// ** ✅ create modal pop up with message when player wins (clicks last matching donut)
 // create timer for game
 // ** start timer with first donut click
 // ** end timer with winning donut click
@@ -64,6 +66,20 @@ function App() {
   //store win conditions in state
   const [dozenzies, setDozenzies] = useState(false);
 
+  // useEffect to watch for win conditions
+  useEffect(() => {
+  //  console.log("Current donuts state:", donuts);
+    if (
+      donuts.every(donut => donut.srcImg === donuts[0].srcImg) && 
+      donuts.every(donut => donut.isHeld === true)
+    ) {
+      // console.log("Condition met, setting dozenzies to true");
+      setDozenzies(true)}
+  }, [donuts])
+
+  console.log(`dozenzies:`, dozenzies)
+
+
   // function to change out donuts when swap button is clicked
   const swapDonuts = () => {
     setDonuts((prevDonuts) => {
@@ -74,8 +90,6 @@ function App() {
     });
   };
 
-  console.log(donuts);
-
   // function to freeze/hold a donut between swap cyclces/rolls
   const holdDonut = (id) => {
     setDonuts((prevDonuts) =>
@@ -85,7 +99,10 @@ function App() {
     );
   };
 
-  console.log(donuts);
+  const newGame = () => {
+    setDozenzies(false);
+    setDonuts(allNewDonuts);
+  }
 
   const donutBoxes = donuts.map((donut) => (
     <Box
@@ -101,6 +118,10 @@ function App() {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  useEffect(() => {
+    dozenzies && openModal()
+  }, [dozenzies])
 
   return (
     <>
@@ -118,9 +139,24 @@ function App() {
             <div className="box--container">
               <div className="donut--container">{donutBoxes}</div>
             </div>
-            <button onClick={swapDonuts}>Swap</button>
+            { !dozenzies && 
+            <button onClick={swapDonuts}>
+              Swap"
+            </button>
+            }
+            { dozenzies && 
+            <button onClick={() => newGame()}>
+              New Game
+            </button>
+            }
           </div>
         </section>
+        <div>
+          {isModalOpen && <Modal onClose={() => setIsModalOpen(false)}>
+            <img src="../donut_coffee.svg" alt="donut in coffee" className='modal--img' />
+            <h2>Well Done!</h2>
+          </Modal>}
+        </div>
       </main>
     </>
   );
@@ -128,12 +164,4 @@ function App() {
 
 export default App;
 
-{
-  /* <div>
-          <button onClick={openModal}>Open Modal</button>
-          <Modal isOpen={isModalOpen} onClose={closeModal}>
-            <h2>Modal Title</h2>
-            <p>This is the modal content!</p>
-          </Modal>
-        </div> */
-}
+
