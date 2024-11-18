@@ -153,7 +153,7 @@ function App() {
         </section>
         <div>
           {isModalOpen && <Modal onClose={() => setIsModalOpen(false)}>
-            <img src="../donut_coffee.svg" alt="donut in coffee" className='modal--img' />
+            <img src="./donut_coffee.svg" alt="donut in coffee" className='modal--img' />
             <h2>Well Done!</h2>
           </Modal>}
         </div>
