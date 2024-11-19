@@ -39,13 +39,28 @@ function App() {
     return donutData[randomIndex];
   };
 
-  function generateNewDonut() {
+  // ** original generateNewDonut function
+  // function generateNewDonut() {
+  //   return {
+  //     id: nanoid(),
+  //     srcImg: randomDonut(donutData),
+  //     isHeld: false,
+  //   };
+  // }
+
+  // this function insures that a box does not receve an identical donut when swap is clicked
+  function generateNewDonut(currentImage) {
+    let newImage;
+    do {
+      newImage = randomDonut(donutData);
+    } while (newImage === currentImage); // Ensure a different image
     return {
       id: nanoid(),
-      srcImg: randomDonut(donutData),
+      srcImg: newImage,
       isHeld: false,
     };
   }
+  
 
   // create an array of 12 donuts
   function allNewDonuts() {
@@ -82,14 +97,24 @@ function App() {
 
 
   // function to change out donuts when swap button is clicked
+  // ** original swapDonuts function
+  // const swapDonuts = () => {
+  //   setDonuts((prevDonuts) => {
+  //     console.log('Current state of prevDonuts:', prevDonuts);
+  //     return prevDonuts.map((donut) =>
+  //       donut.isHeld ? donut : generateNewDonut()
+  //     );
+  //   });
+  // };
+
   const swapDonuts = () => {
-    setDonuts((prevDonuts) => {
-      console.log('Current state of prevDonuts:', prevDonuts);
-      return prevDonuts.map((donut) =>
-        donut.isHeld ? donut : generateNewDonut()
-      );
-    });
+    setDonuts((prevDonuts) =>
+      prevDonuts.map((donut) =>
+        donut.isHeld ? donut : generateNewDonut(donut.srcImg) // Pass current image
+      )
+    );
   };
+  
 
   // function to freeze/hold a donut between swap cyclces/rolls
   const holdDonut = (id) => {
