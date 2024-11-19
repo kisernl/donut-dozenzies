@@ -213,7 +213,7 @@ function App() {
               <div className="donut--container">{donutBoxes}</div>
             </div>
             { !dozenzies && 
-            <button onClick={swapDonuts}>
+            <button onClick={() => { swapDonuts(); handleBoxClick(); }}>
               Swap
             </button>
             }
