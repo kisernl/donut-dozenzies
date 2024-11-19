@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Box from './components/Box.jsx';
 import { nanoid } from 'nanoid';
 import donutData from './assets/donutData.js';
 import Modal from './components/Modal';
+import Score from './components/Score.jsx';
 
 // pseudocode for Donut Dozen-zies
 // ✅ create donut state to hold array of 10 donuts
@@ -17,11 +18,11 @@ import Modal from './components/Modal';
 // ** ✅ create state for tracking win conditions
 // ** ✅ create useEffect to update and watch win state
 // ** ✅ track when all boxes are held & all donut images are the same
-// ** change button copy from "swap" to "new game"
+// ** ✅ change button copy from "swap" to "new game"
 // ** ✅ create modal pop up with message when player wins (clicks last matching donut)
 // create timer for game
-// ** start timer with first donut click
-// ** end timer with winning donut click
+// ** ✅ start timer with first donut click
+// ** ✅ end timer with winning donut click
 // ** paint score to winner message/modal
 // create log of high score in local storage
 // create multiplayer option
@@ -102,13 +103,17 @@ function App() {
   const newGame = () => {
     setDozenzies(false);
     setDonuts(allNewDonuts);
+    resetStopwatch()
   }
 
   const donutBoxes = donuts.map((donut) => (
     <Box
       key={donut.id}
       srcImg={donut.srcImg}
-      holdDonut={holdDonut}
+      holdDonut={(id) => {
+        holdDonut(id); // Keep the hold functionality
+        handleBoxClick(); // Start the timer on first click
+      }}
       id={donut.id}
       isHeld={donut.isHeld}
     />
@@ -123,6 +128,73 @@ function App() {
     dozenzies && openModal()
   }, [dozenzies])
 
+
+  // timer state
+  const [isRunning, setIsRunning] = useState(false);
+  const [elapsedTime, setElapsedTime] = useState(0); // Elapsed time in milliseconds
+  const startTimeRef = useRef(null); // Ref to hold the start timestamp
+  const timerRef = useRef(null); // Ref to manage the interval timer
+  const [hasClicked, setHasClicked] = useState(false); // use to start timer
+  const [finalTime, setFinalTime] = useState(null); // final time to display on modal
+
+   // ** Calculate the display values from elapsed time
+  const getTimeComponents = (elapsed) => {
+    const totalCentiseconds = Math.floor(elapsed / 10);
+    const centiseconds = totalCentiseconds % 100;
+    const totalSeconds = Math.floor(totalCentiseconds / 100);
+    const seconds = totalSeconds % 60;
+    const minutes = Math.floor(totalSeconds / 60);
+    return { minutes, seconds, centiseconds };
+  };
+  
+   // ** Start or stop the stopwatch
+  const startTimer = () => {
+        startTimeRef.current = Date.now();
+        timerRef.current = setInterval(() => {
+          const currentElapsed = Date.now() - startTimeRef.current;
+          setElapsedTime((prev) => prev + currentElapsed);
+          startTimeRef.current = Date.now();
+        }, 10);
+
+      setIsRunning(true);
+    };
+
+    const handleBoxClick = () => {
+      if (!hasClicked) {
+        startTimer(); // Start the timer
+        setHasClicked(true); // Ensure this only triggers on the first click
+      }
+    }
+
+  const stopTimer = () => {
+    clearInterval(timerRef.current);
+    setIsRunning(false)
+    setHasClicked(false)
+  }
+
+  // stop timer
+  useEffect(() => {
+    if (dozenzies) {
+      stopTimer();
+      setFinalTime(elapsedTime);
+    }
+  }, [dozenzies]);
+
+
+    // Reset the stopwatch
+    const resetStopwatch = () => {
+      clearInterval(timerRef.current);
+      setElapsedTime(0);
+      setIsRunning(false);
+    };
+      // Cleanup interval on component unmount
+  useEffect(() => {
+    return () => clearInterval(timerRef.current);
+  }, []);
+
+  // Get formatted time components
+  const { minutes, seconds, centiseconds } = getTimeComponents(elapsedTime);
+
   return (
     <>
       <main>
@@ -136,6 +208,7 @@ function App() {
                 Click on a donut to keep it from being swapped.
               </p>
             </div>
+            <Score minutes={minutes} seconds={seconds} centiseconds={centiseconds} />
             <div className="box--container">
               <div className="donut--container">{donutBoxes}</div>
             </div>
@@ -154,7 +227,13 @@ function App() {
         <div>
           {isModalOpen && <Modal onClose={() => setIsModalOpen(false)}>
             <img src="./donut_coffee.svg" alt="donut in coffee" className='modal--img' />
-            <h2>Well Done!</h2>
+            <h2 id='modal--message'>Well Done!</h2>
+            {finalTime !== null && (
+              <h4>
+                Your time:{" "}
+                {`${getTimeComponents(finalTime).minutes}: ${getTimeComponents(finalTime).seconds}: ${getTimeComponents(finalTime).centiseconds}`}
+              </h4>
+            )}
           </Modal>}
         </div>
       </main>
