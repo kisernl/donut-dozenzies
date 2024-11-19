@@ -5,7 +5,7 @@ import donutData from './assets/donutData.js';
 import Modal from './components/Modal';
 import Score from './components/Score.jsx';
 
-// pseudocode for Donut Dozen-zies
+// pseudocode/steps for Donut Dozen-zies
 // ✅ create donut state to hold array of 10 donuts
 // ✅ display 12 random donuts in a grid using a box element
 // ✅ create onClick event that swaps out the donuts
@@ -14,16 +14,16 @@ import Score from './components/Score.jsx';
 // ** ✅ create toggle for is held based on click (in box component)
 // ** ✅ create conditional box coloring depending on isHeld
 // ** ✅ make isHeld boxes remain when other boxes swap
-// create win game feature
+// ✅ create win game feature
 // ** ✅ create state for tracking win conditions
 // ** ✅ create useEffect to update and watch win state
 // ** ✅ track when all boxes are held & all donut images are the same
 // ** ✅ change button copy from "swap" to "new game"
 // ** ✅ create modal pop up with message when player wins (clicks last matching donut)
-// create timer for game
+// ✅ create timer for game
 // ** ✅ start timer with first donut click
 // ** ✅ end timer with winning donut click
-// ** paint score to winner message/modal
+// ** ✅ paint score to winner message/modal
 // create log of high score in local storage
 // create multiplayer option
 // ** one to four players
@@ -192,6 +192,9 @@ function App() {
     return () => clearInterval(timerRef.current);
   }, []);
 
+  const formatTime = (time) => {
+    return time < 10 ? `0${time}` : time;
+  };
   // Get formatted time components
   const { minutes, seconds, centiseconds } = getTimeComponents(elapsedTime);
 
@@ -231,7 +234,7 @@ function App() {
             {finalTime !== null && (
               <h4>
                 Your time:{" "}
-                {`${getTimeComponents(finalTime).minutes}: ${getTimeComponents(finalTime).seconds}: ${getTimeComponents(finalTime).centiseconds}`}
+                {`${formatTime(getTimeComponents(finalTime).minutes)}: ${formatTime(getTimeComponents(finalTime).seconds)}: ${formatTime(getTimeComponents(finalTime).centiseconds)}`}
               </h4>
             )}
           </Modal>}
