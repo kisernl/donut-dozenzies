@@ -93,7 +93,7 @@ function App() {
       setDozenzies(true)}
   }, [donuts])
 
-  console.log(`dozenzies:`, dozenzies)
+  // console.log(`dozenzies:`, dozenzies)
 
 
   // function to change out donuts when swap button is clicked
@@ -223,6 +223,29 @@ function App() {
   // Get formatted time components
   const { minutes, seconds, centiseconds } = getTimeComponents(elapsedTime);
 
+  // create high score tracker with local storage
+  
+  const highScore = () => {
+    let storedScore = localStorage.getItem("score");
+    if (storedScore === null || finalTime < storedScore) {
+      console.log('New High Score! ', finalTime)
+      localStorage.setItem("score", finalTime);
+    } else {
+      console.log('Your score: ', finalTime, "High Score: ", storedScore)
+      }
+    return storedScore
+  }
+
+  const clearHighScore = () => {
+    localStorage.clear()
+  }
+
+  // console.log(highScore)
+
+// let storedScore = localStorage.getItem("score");
+// console.log(storedScore)
+
+
   return (
     <>
       <main>
@@ -262,6 +285,15 @@ function App() {
                 {`${formatTime(getTimeComponents(finalTime).minutes)}: ${formatTime(getTimeComponents(finalTime).seconds)}: ${formatTime(getTimeComponents(finalTime).centiseconds)}`}
               </h4>
             )}
+            {highScore !== null && (
+                <p>
+                  Fastest Time:{" "}
+                  {`${formatTime(getTimeComponents(highScore()).minutes)}: ${formatTime(getTimeComponents(highScore()).seconds)}: ${formatTime(getTimeComponents(highScore()).centiseconds)}`}
+                </p>
+              )
+            }
+            <button id="new-game--btn" onClick={() => {newGame(); closeModal()}}>New Game</button>
+            <button id="reset--btn" onClick={() => {clearHighScore(); newGame(); closeModal() }}>Reset Fastest Time</button>
           </Modal>}
         </div>
       </main>
